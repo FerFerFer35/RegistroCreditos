@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrar nuevo crédito</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+    <main>
+        <h1>Registrar nuevo crédito</h1>
+        <!-- Método POST que apunte a tu endpoint para registrar que creo que es registrarCredito -->
+        <form action="/registrarCredito" method="POST">
+            <!-- Usa require para no hacer validaciones en JS -->
+            <!-- Usa el type para que no haya conflictos en la BD -->
+            <label for="cliente">Nombre del cliente:</label>
+            <!-- El name o el id es el valor del body request, no recuerdo ahorita, poner los dos por si acaso -->
+            <input type="text" id="cliente" name="cliente" required>
+
+            <label for="monto">Monto del crédito:</label>
+            <input type="number" id="monto" name="monto" required>
+
+            <label for="tasaInteres">Tasa de interés anual:</label>
+            <input type="number" id="tasaInteres" name="tasaInteres" step="0.01" required>
+
+            <label for="plazo">Plazo (en meses):</label>
+            <input type="number" id="plazo" name="plazo" required>
+
+            <label for="fechaOtorgamiento">Fecha de otorgamiento:</label>
+            <input type="date" id="fechaOtorgamiento" name="fechaOtorgamiento" required>
+
+            <button type="submit">Registrar nuevo crédito</button>
+            <button onclick="location.href='/verCreditos'" type="button">Listar todos los créditos</button>
+        </form>
+    </main>
+
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+
+</html>

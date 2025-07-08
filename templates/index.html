@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <!-- Integración de la hoja de estilos (con jinja2) desde la carpeta static/style.css -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+    <main>
+        <!-- location.href que apunte al endpoint donde redirigimos cada pagina -->
+        <button onclick="location.href='/redirigirRegistrarCredito'">Registrar nuevo crédito</button>
+        <button onclick="location.href='/VerCreditos'">Listar todos los créditos</button>
+    </main>
+</body>
+<!-- Integración del script (con jinja2) desde la carpeta static/script.js -->
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+
+</html>

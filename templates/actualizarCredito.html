@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Editar Crédito</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+    <main>
+        <!-- Copiar el form de registrar  -->
+        <h1>Editar Crédito</h1>
+        <!-- Metodo PUT -->
+        <!-- Correción: metodo POST, no entendi la documentación pero meditarlo y entenderlo depues -->
+        <form method="POST">
+            <!-- El value de cada imput debe de ser asi: {{ credito.campobd }} -->
+            <label for="cliente">Nombre del Cliente:</label>
+            <input type="text" id="cliente" name="cliente" value="{{ credito.cliente }}" required>
+
+            <label for="monto">Monto del Crédito:</label>
+            <input type="number" id="monto" name="monto" value="{{ credito.monto }}" required>
+
+            <label for="tasaInteres">Tasa de Interés:</label>
+            <input type="number" step="0.01" id="tasaInteres" name="tasaInteres" value="{{ credito.tasaInteres }}"
+                required>
+
+            <label for="plazo">Plazo (meses):</label>
+            <input type="number" id="plazo" name="plazo" value="{{ credito.plazo }}" required>
+
+            <label for="fechaOtorgamiento">Fecha de Otorgamiento:</label>
+            <input type="date" id="fechaOtorgamiento" name="fechaOtorgamiento" value="{{ credito.fechaOtorgamiento }}"
+                required>
+
+            <button type="submit">Actualizar Crédito</button>
+        </form>
+
+        <button onclick="location.href='/verCreditos'">Cancelar</button>
+    </main>
+</body>
+
+</html>

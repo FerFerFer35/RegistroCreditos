@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ver créditos</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+
+<body>
+    <main>
+        <h1>Lista de Créditos</h1>
+        <table>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre del Cliente</th>
+                    <th>Monto del Crédito</th>
+                    <th>Tasa de Interés</th>
+                    <th>Plazo</th>
+                    <th>Fecha de Registro</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Aqui usar ese for extraño incluido con jinja -->
+                <!-- Alternativa: Usar .map con JS pero no se si tenga soporte para jinja2 -->
+                {% for credito in creditos %}
+                <tr>
+                    <td>{{ credito.id }}</td>
+                    <td>{{ credito.cliente }}</td>
+                    <td>{{ credito.monto }}</td>
+                    <td>{{ credito.tasaInteres }}</td>
+                    <td>{{ credito.plazo }}</td>
+                    <td>{{ credito.fechaOtorgamiento }}</td>
+                    <td>
+                        <!-- Pasar el id para editar y eliminar -->
+                        <a href="/editarCredito/{{ credito.id }}"><button>Editar</button></a>
+                        <a href="/eliminarCredito/{{ credito.id }}"><button>Eliminar</button></a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <button onclick="location.href='/redirigirRegistrarCredito'">Registrar nuevo crédito</button>
+    </main>
+</body>
+
+</html>
