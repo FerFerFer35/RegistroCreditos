@@ -92,5 +92,19 @@ def editarCredito(id):
 
     return render_template("actualizarCredito.html", credito=credito)
 
+
+@app.route('/datosGrafica')
+def datosGrafica():
+    # Consulta para obtener los datos de los créditos
+    creditos = Credito.query.all()
+
+    # Datos para la gráfica
+    cliente = [credito.cliente for credito in creditos]
+    monto = [credito.monto for credito in creditos]
+
+    return render_template(
+        "grafica.html", cliente=cliente, monto=monto)
+
+
 if __name__ == '__main__':
     app.run(debug=True)

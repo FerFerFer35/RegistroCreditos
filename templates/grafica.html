@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<title>Gráfica</title>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+<body>
+    <main>
+        <canvas id="myChart"></canvas>
+        <button onclick="location.href='/redirigirRegistrarCredito'">Registrar nuevo crédito</button>
+        <button onclick="location.href='/verCreditos'" type="button">Listar todos los créditos</button>
+    </main>
+    <script>
+        function generarColores(cantidad) {
+            let colores = [];
+            for (let i = 0; i < cantidad; i++) {
+                // Genera color aleatorio
+                let color = "#" + Math.floor(Math.random() * 16777215).toString(16);
+                colores.push(color);
+            }
+            return colores;
+        }
+
+        // Gráfica 1
+        var xValues = {{ cliente | safe }};
+        var yValues = {{ monto | safe }};
+        var barColors = generarColores(xValues.length);
+
+        new Chart("myChart", {
+            type: "pie",
+            data: {
+                labels: xValues,
+                datasets: [{
+                    backgroundColor: barColors,
+                    data: yValues
+                }]
+            },
+            options: {
+                title: {
+                    display: true,
+                    text: "Distribución de montos otorgados por cliente"
+                }
+
+            }
+        });
+    </script>
+
+</body>
+
+</html>
