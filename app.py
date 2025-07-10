@@ -5,6 +5,8 @@ import os
 # Esto me ayudo Copilot a completarlo
 baseDir = os.path.abspath(os.path.dirname(__file__))
 
+# Configuración de la aplicación Flask y SQLAlchemy
+# Aquí se configura la base de datos SQLite y se crea la instancia de la aplicación Flask.
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(baseDir, 'Database', 'creditos.db')
 db = SQLAlchemy(app)
@@ -102,8 +104,7 @@ def datosGrafica():
     cliente = [credito.cliente for credito in creditos]
     monto = [credito.monto for credito in creditos]
 
-    return render_template(
-        "grafica.html", cliente=cliente, monto=monto)
+    return render_template("grafica.html", cliente=cliente, monto=monto)
 
 
 if __name__ == '__main__':

@@ -11,10 +11,13 @@
         <button onclick="location.href='/verCreditos'" type="button">Listar todos los créditos</button>
     </main>
     <script>
+
+        // Función para generar un color aleatorio ya que sin un color la gráfica no se ve
+        // Esta función genera un color hexadecimal aleatorio para cada segmento de la gráfica.
+        // Función basada en una respuesta de Stack Overflow (adaptada para este contexto): https://stackoverflow.com/questions/1484506/random-color-generator/1484514#1484514
         function generarColores(cantidad) {
             let colores = [];
             for (let i = 0; i < cantidad; i++) {
-                // Genera color aleatorio
                 let color = "#" + Math.floor(Math.random() * 16777215).toString(16);
                 colores.push(color);
             }
@@ -24,6 +27,8 @@
         // Gráfica 1
         var xValues = {{ cliente | safe }};
         var yValues = {{ monto | safe }};
+        // Asignar valores estáticos no sirve ya que los valores de x van creciendo o decreciendo
+        // por lo que se debe generar un color para cada valor de x
         var barColors = generarColores(xValues.length);
 
         new Chart("myChart", {
