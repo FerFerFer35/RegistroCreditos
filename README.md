@@ -31,13 +31,13 @@ Si ya tienes pipenv, puedes omitir este paso.
 ### Paso 4. Instalar las dependencias del proyecto
 Ejecuta el siguiente comando para instalar todas las dependencias definidas en el entorno:
 ```bash
-pipenv install
+py -m pipenv install
 ```
 
 ### Paso 5. Activar el entorno virtual
 Una vez instaladas las dependencias, activa el entorno con:
 ```bash
-pipenv shell
+py -m pipenv shell
 ```
 
 ### Paso 6. Ejecutar la aplicación
