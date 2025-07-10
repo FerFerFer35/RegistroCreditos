@@ -2,17 +2,18 @@ from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 import os
 
-# Esto me ayudo Copilot a completarlo
+# NOTE: Esta parte fue completada con ayuda de Copilot.
 baseDir = os.path.abspath(os.path.dirname(__file__))
 
 # Configuración de la aplicación Flask y SQLAlchemy
-# Aquí se configura la base de datos SQLite y se crea la instancia de la aplicación Flask.
+# Aquí se establece la conexión con la base de datos SQLite
+# y se crea la instancia de la aplicación Flask.
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(baseDir, 'Database', 'creditos.db')
 db = SQLAlchemy(app)
 
-# Modelo/Entidad/Tabla de Creditos
-# Debimos de haber creado el modelo en otro archivo como lo hacemos en Spring (si lo recuerdas lo haces).
+# Modelo/Entidad/Tabla de Créditos
+# TODO: Este modelo podría haberse colocado en un archivo separado, como se hace comúnmente en frameworks como Spring.
 class Credito(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     cliente = db.Column(db.String(100), nullable=False)
@@ -26,26 +27,24 @@ class Credito(db.Model):
 def index():
     return render_template('index.html')
 
-# Ruta para registrar
+# Ruta para redirigir al formulario de registro de crédito
 @app.route('/redirigirRegistrarCredito')
 def redirigirRegistrarCredito():
     return render_template('registrarCredito.html')
 
-# Ruta para ver todos los créditos
+# Ruta para visualizar todos los créditos registrados
 @app.route('/verCreditos')
 def verCreditos():
-    # Es necesario englobar la consulta a la base de datos en una variable para enviar los datos a la plantilla.
-    # Con la funcion query.all() del ORM obtenemos todos los registros de la tabla.
+    # Se obtiene la lista completa de créditos usando el ORM de SQLAlchemy.
     creditos = Credito.query.all()
-    # Nota: Enviar los datos en el return para mostrar en la plantilla.
+    # Los créditos se envían a la plantilla para su visualización.
     return render_template('verCreditos.html', creditos=creditos)
 
-# Registrar crédito
+# Ruta para registrar un nuevo crédito
 @app.route('/registrarCredito', methods=['POST'])
 def registrarCredito():
-    # Pasos para entender el funcionamiento:
-    # 1. Recibir los datos del formulario, e instancial con el modelo Credito.
-    # Cada campo del formulario debe coincidir con los atributos del modelo.
+    # Paso 1: Recibir los datos del formulario e instanciar el modelo Credito.
+    # Cada campo debe coincidir con los atributos definidos en el modelo.
     nuevoCredito = Credito(
         cliente=request.form['cliente'],
         monto=float(request.form['monto']),
@@ -54,58 +53,60 @@ def registrarCredito():
         fechaOtorgamiento=request.form['fechaOtorgamiento']
     )
 
-    # 2. Utlizamos el ORM de SQLAlchemy (similar a Laravel y Spring) para agregar el nuevo crédito a la base de datos.
+    # Paso 2: Agregar el nuevo crédito a la sesión de base de datos.
     db.session.add(nuevoCredito)
-    # 3. Commit para guardar los cambios en la base de datos.
+
+    # Paso 3: Confirmar los cambios en la base de datos.
     db.session.commit()
-    # 4. Redirigir a la página de ver créditos.
+
+    # Paso 4: Permanecer en la vista actual de registro.
     return render_template('registrarCredito.html')
 
-# Eliminar crédito
+# Ruta para eliminar un crédito
 @app.route('/eliminarCredito/<int:id>')
 def eliminarCredito(id):
-    # Solo filtra y concatena la funcion .delete() para eliminar el registro.
+    # Se busca el crédito por ID y se elimina directamente.
     Credito.query.filter_by(id=id).delete()
-    # Acuérdate de hacer commit para guardar los cambios en la base de datos.
+
+    # Confirmar los cambios tras la eliminación.
     db.session.commit()
     return redirect('/verCreditos')
 
-# Editar crédito
+# Ruta para editar un crédito existente
 @app.route("/editarCredito/<int:id>", methods=["GET", "POST"])
 def editarCredito(id):
-    # Función de editar, un poco más compleja, la creamos después
-    # Sera necesario subir cambios al repositorio?: -> Mejor lo subimos ya que hayamos completado el proyecto.
-    # Continuamos aqui después ⬇️
+    # Se obtiene el crédito mediante su ID o se lanza un error 404 si no existe.
     credito = Credito.query.get_or_404(id)
 
-    # Utiliza get_or_404 por si no esxiste ⬆️
-    # ⬆️ debe de axistir siempre por que lo concatenamos con un boton
+    # NOTE: Esta función es más compleja, fue desarrollada después de las rutas básicas.
+    # TODO: Considerar subir cambios al repositorio ahora que esta funcionalidad ya está terminada.
+
     if request.method == "POST":
+        # Actualizar los datos del crédito con la información del formulario.
         credito.cliente = request.form["cliente"]
         credito.monto = float(request.form["monto"])
         credito.tasaInteres = float(request.form["tasaInteres"])
         credito.plazo = int(request.form["plazo"])
         credito.fechaOtorgamiento = request.form["fechaOtorgamiento"]
 
+        # Guardar los cambios en la base de datos.
         db.session.commit()
         return redirect(url_for("verCreditos"))
     
-    # Ahora si sube los cambios al repositorio ya que todo funciona correctamente.
-
+    # NOTE: Llegado a este punto, todo funciona correctamente y los cambios pueden subirse al repositorio.
     return render_template("actualizarCredito.html", credito=credito)
 
-
+# Ruta para enviar los datos necesarios para generar la gráfica
 @app.route('/datosGrafica')
 def datosGrafica():
-    # Consulta para obtener los datos de los créditos
+    # Se obtiene toda la información de los créditos registrados.
     creditos = Credito.query.all()
 
-    # Datos para la gráfica
+    # Se extraen los datos específicos que se utilizarán en la gráfica.
     cliente = [credito.cliente for credito in creditos]
     monto = [credito.monto for credito in creditos]
 
     return render_template("grafica.html", cliente=cliente, monto=monto)
-
 
 if __name__ == '__main__':
     app.run(debug=True)
